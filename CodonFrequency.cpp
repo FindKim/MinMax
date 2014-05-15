@@ -623,6 +623,8 @@ void CodonFrequency::outputFileCF(char *file) {
   string ofilename(file);
 	ofilename.append(".cf");
 
+	cout << "Creating " << ofilename << endl;
+
   ofstream ofile;
   ofile.open (ofilename.c_str());
 

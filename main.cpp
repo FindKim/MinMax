@@ -20,8 +20,10 @@ using namespace std;
 
 int main() {
   
+  char *filename = "Ypes.fasta";
 // testing to verify the frequency calculations
-  ExtractSequence codFreq("Ypes.fasta");
-  MinMax calcMinMax("Ypes.fasta", codFreq.getVectorOfSequences());
+  ExtractSequence Seqs(filename);
+  CodonFrequency CF(filename, Seqs.getVectorOfSequences());
+  MinMax calcMinMax(filename, Seqs.getVectorOfSequences(), CF);
 	return 0;
 }

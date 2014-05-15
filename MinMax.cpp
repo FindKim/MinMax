@@ -23,16 +23,14 @@ const int WINDOWSIZE = 17;
 using namespace std;
 
 // Calculates MinMax values for each codon and calls outputFileMM
-MinMax::MinMax(char *filename, vector<Sequence> seq)
-	: CodonFrequency(filename, seq) {
-
+MinMax::MinMax(char *filename, vector<Sequence> seq, CodonFrequency cf) {
 
 	// Initializes maps with inherited maps from Codon Frequency
-	vector<float> minMap = getMinMap();
-	vector<float> maxMap = getMaxMap();
-	vector<float> avgMap = getAvgMap();
-	float *codonFreq = getCodonFreq();
-	int *codonToAAMap = getCodonToAAMap();
+	vector<float> minMap = cf.getMinMap();
+	vector<float> maxMap = cf.getMaxMap();
+	vector<float> avgMap = cf.getAvgMap();
+	float *codonFreq = cf.getCodonFreq();
+	int *codonToAAMap = cf.getCodonToAAMap();
 	
 	
 	// Calculates min max for each sequence in vector of seqs
@@ -121,6 +119,8 @@ void MinMax::outputFileMM(char *file, vector< pair< string, vector<float> > > mi
 
 	string filename(file);
 	filename.append(".mm");	
+
+	cout << "Creating " << filename << endl;
 
 	ofstream ofile;
 	ofile.open (filename.c_str());
