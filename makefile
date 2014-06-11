@@ -16,8 +16,7 @@ ExtractSequence.o: ExtractSequence.cpp ExtractSequence.h
 	g++ -c ExtractSequence.cpp
 
 CodonFrequency.o: CodonFrequency.cpp CodonFrequency.h
-	g++ -g -c CodonFrequency.cpp #-std=c++0x
-	# -std=c++0x used to compile struct like initialization for codon vector
+	g++ -g -c CodonFrequency.cpp
 
 MinMax.o: MinMax.cpp MinMax.h
 	g++ -c MinMax.cpp

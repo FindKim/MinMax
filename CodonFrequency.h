@@ -27,7 +27,7 @@ using namespace std;
 class CodonFrequency {
 
 	public:
-		CodonFrequency(char *, vector<Sequence>);			
+		CodonFrequency(string, vector<Sequence>);			
 			// Initializes codon vector with codon triplets and # of occurances
 			// Calculates maps for min, max, avg frequency
 			// Creates output file for codon frequency
@@ -44,7 +44,7 @@ class CodonFrequency {
 			// Prints number of occurances and count
 		void printFreq();
 			// Prints codon frequency for a seq
-		void outputFileCF(char *file);	
+		void outputFileCF(string file);	
 			// Spits Codon|Codon Freq|count into output file name string
 		string decimalToBinary(int);
 			// Converts decimal number to 6 bit string

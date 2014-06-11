@@ -23,7 +23,7 @@ const int WINDOWSIZE = 17;
 using namespace std;
 
 // Calculates MinMax values for each codon and calls outputFileMM
-MinMax::MinMax(char *filename, vector<Sequence> seq, CodonFrequency cf) {
+MinMax::MinMax(string filename, vector<Sequence> seq, CodonFrequency cf) {
 
 	// Initializes maps with inherited maps from Codon Frequency
 	vector<float> minMap = cf.getMinMap();
@@ -115,7 +115,7 @@ vector<float> MinMax::calcMinMax(Sequence &seq, vector<float> &minMap, vector<fl
 
 
 // Stores MinMax frequency for each codon for the vector of sequences in an output file
-void MinMax::outputFileMM(char *file, vector< pair< string, vector<float> > > minMaxSequences) {
+void MinMax::outputFileMM(string file, vector< pair< string, vector<float> > > minMaxSequences) {
 
 	string filename(file);
 	filename.append(".mm");	

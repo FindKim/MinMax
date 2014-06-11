@@ -18,9 +18,11 @@
 #include <vector>
 using namespace std;
 
-ExtractSequence :: ExtractSequence(char *filename){
+ExtractSequence :: ExtractSequence(string filename){
     ifstream file;
-    file.open(filename);
+    
+    cout << "Reading " << filename << endl;
+    file.open(filename.c_str());
     string sequence;
     string line;
     int i=0;
@@ -53,7 +55,7 @@ ExtractSequence :: ExtractSequence(char *filename){
     it is formatted the way the file Aaron sent me was. 
 	
     */  
-
+		cout << "Finished reading " << filename << endl;
     file.close();
 }
 ExtractSequence :: ExtractSequence(){}

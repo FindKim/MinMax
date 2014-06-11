@@ -21,7 +21,7 @@ using namespace std;
 class ExtractSequence{
 
 	public:
-    ExtractSequence(char *); // constructor takes in filename
+    ExtractSequence(string); // constructor takes in filename
     ExtractSequence(); // default constructor
     vector<Sequence> getVectorOfSequences();	// Returns the vector of sequences
     Sequence getSequence(string);// searching for Sequence by name

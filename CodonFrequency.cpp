@@ -27,7 +27,7 @@ using namespace std;
 
 const int NUM_TYPE_OF_CODONS = 64;
 
-CodonFrequency::CodonFrequency(char *filename, vector<Sequence> seq) {
+CodonFrequency::CodonFrequency(string filename, vector<Sequence> seq) {
 
 	// initializes codonOcc array to 0
 	for (int i = 0; i < NUM_TYPE_OF_CODONS; i++) {
@@ -66,7 +66,7 @@ CodonFrequency::CodonFrequency(char *filename, vector<Sequence> seq) {
 	calcFreq(Sequences);
 
 	AAtoCodonMap = createMap(codonFreq);
-	printMap(AAtoCodonMap);
+//	printMap(AAtoCodonMap);
 	minMap = createMinMap(AAtoCodonMap);
 	maxMap = createMaxMap(AAtoCodonMap);
 	avgMap = createAvgMap(AAtoCodonMap);
@@ -131,9 +131,9 @@ void CodonFrequency::calcFreq(vector<Sequence> &seq) {
 				count++;
 			}
 	}
-	cout << endl;
 	set_codonCount(count);	// Increments with setter; codonCount is private data member
-	cout << "codon count = " << getCodonCount() << endl;
+//	cout << endl;
+//	cout << "codon count = " << getCodonCount() << endl;
 	for (int k = 0; k < NUM_TYPE_OF_CODONS; k++) {
 		codonFreq[k] = (float) codonOcc[k] / count * 1000;
 //		cout << k << "	" << codonFreq[k] << " = " << codonOcc[k] << " / " << count << endl;
@@ -281,7 +281,7 @@ float CodonFrequency::findMax(multimap<char, pair<int, float> > AAtoCodonMap, ch
 // Maps lowest frequency of codons to each amino acid
 vector<float> CodonFrequency::createMinMap(multimap<char, pair<int, float> > AAtoCodonMap) {
 
-	cout << "------minFreq------" << endl;
+//	cout << "------minFreq------" << endl;
 
 	float minFreq;
 	vector<float> minMap;
@@ -308,7 +308,7 @@ vector<float> CodonFrequency::createMinMap(multimap<char, pair<int, float> > AAt
 			minMap.push_back(AAtoCodonMap.find(AA)->second.second);
 		}
 //		to print values: comment out the continues in if statements
-		cout << addressAA << " " << AA << " " << minMap[addressAA] << endl;
+//		cout << addressAA << " " << AA << " " << minMap[addressAA] << endl;
 	}
 	return minMap;
 }
@@ -317,7 +317,7 @@ vector<float> CodonFrequency::createMinMap(multimap<char, pair<int, float> > AAt
 // Maps highest frequency of codons to each amino acid
 vector<float> CodonFrequency::createMaxMap(multimap<char, pair<int, float> > AAtoCodonMap){
 
-	cout << "------maxFreq------" << endl;
+//	cout << "------maxFreq------" << endl;
 
 	vector<float> maxMap;
 	float maxFreq;
@@ -344,7 +344,7 @@ vector<float> CodonFrequency::createMaxMap(multimap<char, pair<int, float> > AAt
 			maxMap.push_back(AAtoCodonMap.find(AA)->second.second);
 		}
 //		to print values: comment out the continues in if statements
-		cout << addressAA << " " << AA << " " << maxMap[addressAA] << endl;
+//		cout << addressAA << " " << AA << " " << maxMap[addressAA] << endl;
 	}
 	return maxMap;
 }
@@ -354,7 +354,7 @@ vector<float> CodonFrequency::createMaxMap(multimap<char, pair<int, float> > AAt
 // Maps average frequency of codons to each amino acid
 vector<float> CodonFrequency::createAvgMap(multimap<char, pair<int, float> > AAtoCodonMap) {
 	
-	cout << "------avgFreq------" << endl;
+//	cout << "------avgFreq------" << endl;
 	
 	int addressAA;
 	int codonPerAA;	// Numbers of codons that code for an amino acid
@@ -396,7 +396,7 @@ vector<float> CodonFrequency::createAvgMap(multimap<char, pair<int, float> > AAt
 			avgMap.push_back(AAtoCodonMap.find(AA)->second.second);
 //			continue;
 		}
-		cout << addressAA << " " << AA << " " << avgMap[addressAA] << endl;
+//		cout << addressAA << " " << AA << " " << avgMap[addressAA] << endl;
 	}
 	return avgMap;
 }
@@ -618,9 +618,8 @@ int * CodonFrequency::getCodonToAAMap() {
 
 // Creates an output file with the inputfile name with .cf appended
 // Output file contains codon, codon frequency, and # of occurances
-void CodonFrequency::outputFileCF(char *file) {
+void CodonFrequency::outputFileCF(string ofilename) {
 
-  string ofilename(file);
 	ofilename.append(".cf");
 
 	cout << "Creating " << ofilename << endl;
