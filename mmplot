@@ -1,0 +1,61 @@
+#!/usr/bin/python
+
+# mmplot created by Kim Ngo
+# June 6, 2014
+#
+# mmplot reads in .mm files created by main program and offers the option to plot min max values for specified genes as heat maps or stacked histograms
+
+import os
+import sys
+
+def touch(fname):
+	try:
+		os.utime(fname, None)
+	except:
+		open(fname, 'a').close()
+
+def menu():
+	print('Plotting Menu:')
+	print('	1. Heatmaps')
+	print('	2. Stacked histograms')
+	print('	3. Exit')
+	selection = int(input('Make a selection from the list above:	'))
+	return selection
+
+
+
+filePath = raw_input('Enter .mm file to plot if the file is in this working directory.\nOtherwise, enter the absolute path.\n')
+
+# Compiles transpose supporting c prog that transposes .mm file from rows to columns
+os.system('gcc transpose.c -o transpose')
+
+# Changes file extension from .mm to .csv
+csvFilePath = filePath.strip('.mm')
+csvFilePath = csvFilePath + '.csv'
+touch(csvFilePath)
+
+# Transposes rows of file to columns
+transposeFile = './transpose -t --fsep "," %s > %s' %(filePath, csvFilePath)
+os.system(transposeFile)
+
+selection = menu()
+while(selection != 0):
+	if selection == 1:
+		selection = menu()
+	
+	elif selection == 2:
+		menu()
+	
+	elif selection == 3:
+		sys.exit()
+	
+	else:
+		menu()
+
+#file_in = open(csvFilePath, 'r')
+
+#for line in file_in:
+#	print line[0]
+#file_in.close()
+
+

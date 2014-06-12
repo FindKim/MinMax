@@ -133,13 +133,13 @@ void MinMax::outputFileMM(string file, vector< pair< string, vector<float> > > m
 
 			ofile << minMaxSequences[i].first;
 //			ofile << endl;
-			ofile << "\t";
+			ofile << ",";
 
 			for (int j = 0; j < minMaxSequences[i].second.size(); j++) {
 			
 				ofile << minMaxSequences[i].second[j];
 //				ofile << ",";
-				ofile << "\t";
+				ofile << ",";
 			}
 			ofile << endl;
 		}

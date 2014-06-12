@@ -26,7 +26,7 @@ int main() {
 	string filename;
 	// Enter genome files
 	cout << "- Enter file names to calculate codon frequency and min max values for a list of genomes." << endl;
-	cout << "- After all intended genomes are input, leave the entry empty and press enter to continue." << endl;
+	cout << "- After all intended genomes are inputed, leave the entry blank and press enter to continue." << endl;
 	
 	// Loop to ask for file input
 	while(1) {
@@ -37,9 +37,9 @@ int main() {
 	  	ifstream file(filename.c_str());
 
 			// Check if file exists and readable
-	  	if(file.good()) {
+	  	if(file.good() && file.is_open()) {
 	  		file.close();
-	  		
+	  		cout << file << endl;
 	  		ExtractSequence Seqs(filename);				// Extract sequences from file
 				genomeSeqs.push_back(Seqs);						// Adds sequences to vector of genomes
 				genomeFileNames.push_back(filename);	// Adds genome file names to vector
