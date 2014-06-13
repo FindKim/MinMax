@@ -22,4 +22,4 @@ MinMax.o: MinMax.cpp MinMax.h
 	g++ -c MinMax.cpp
 
 clean:
-	rm -f *.o *.mm *.cf *.ps *.csv *.pdf *~ main
+	rm -f *.o *.mm *.cf *.ps *.csv *.pdf *.pyc *~ main
