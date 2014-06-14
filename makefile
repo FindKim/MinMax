@@ -1,7 +1,7 @@
-all: main
+all: minmax transpose
 
-main: main.o Sequence.o ExtractSequence.o CodonFrequency.o MinMax.o Domain.o
-	g++ main.o Sequence.o ExtractSequence.o CodonFrequency.o MinMax.o Domain.o -o main
+minmax: main.o Sequence.o ExtractSequence.o CodonFrequency.o MinMax.o Domain.o
+	g++ main.o Sequence.o ExtractSequence.o CodonFrequency.o MinMax.o Domain.o -o minmax
 
 main.o: main.cpp
 	g++ -c main.cpp
@@ -21,5 +21,9 @@ CodonFrequency.o: CodonFrequency.cpp CodonFrequency.h
 MinMax.o: MinMax.cpp MinMax.h
 	g++ -c MinMax.cpp
 
+transpose: transpose.c
+	gcc transpose.c -o transpose
+	# Compiles transpose supporting c prog that transposes .mm file from rows to columns
+
 clean:
-	rm -f *.o *.mm *.cf *.ps *.csv *.pdf *.pyc *~ main
+	rm -f *.o *.mm *.cf *.ps *.csv *.pdf *.pyc *~ minmax transpose
