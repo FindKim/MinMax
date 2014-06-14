@@ -2,5 +2,12 @@ connect gnuplot
 have option to plot which column
 	regex to get column #
 
-add heatmap R
+
+add heatmap R--mm_heatmap_plot.py
 	learn R -shoot myself
+
+plot all sequences in genenome
+align plots to capture 80-90% of gene length for each species
+add p-value for histo and R
+	x axis: aligned gene length
+	y axis: # of sig rrc/100 cod
