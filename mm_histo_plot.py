@@ -4,7 +4,7 @@ import re
 import sys
 import os
 
-class histogram:
+class mm_histo_plot():
 	def __init__(self, fileName):
 		self.fileName = fileName
 		self.plotFileName = fileName.strip('.csv') + '.gp'
@@ -87,7 +87,9 @@ class histogram:
 		os.system(command)
 
 def main():
-	histo = histogram('Ecol_test.fasta.csv')
+#	print str(sys.argv[1])
+	fileName = str(sys.argv[1])
+	histo = mm_histo_plot(fileName)
 	print 'The number of sequences: %d' %(histo.get_numOfSeqs())
 	histo.touch(histo.get_plotFileName())
 	histo.format_histo()
