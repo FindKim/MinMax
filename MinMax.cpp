@@ -17,6 +17,7 @@
 #include <fstream> // output file
 #include <utility>
 #include <string>
+#include <stdlib.h> // system
 
 const int WINDOWSIZE = 17;
 
@@ -49,6 +50,10 @@ MinMax::MinMax(string filename, vector<Sequence> seq, CodonFrequency cf) {
 		minMaxSequences.push_back(temp);
 	}
 	outputFileMM(filename, minMaxSequences);
+
+	string mmfile = filename.erase(filename.size()-6, filename.size()); //".fasta"
+	mmfile.append(".mm");	
+	transposeOutput(mmfile);
 }
 
 
@@ -149,4 +154,24 @@ void MinMax::outputFileMM(string file, vector< pair< string, vector<float> > > m
 		cout << filename << " has been created." << endl;
 		
 	} else cout << "Unable to open " << filename << endl;
+}
+
+
+// Transposes outputfile from rows to columns format for gnuplot & R downstream
+void MinMax::transposeOutput(string file) {
+	
+	string tempName = file;
+	tempName = tempName.erase(file.size()-3, file.size()); //".mm"
+	tempName.append(".csv");
+	string command = "./transpose -t --fsep ',' ";
+	command.append(file);
+	command.append(" > ");
+	command.append(tempName);
+	system(command.c_str());
+	
+	string renameFile = "mv ";
+	renameFile.append(tempName);
+	renameFile.append(" ");
+	renameFile.append(file);
+	system(renameFile.c_str());
 }

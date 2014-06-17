@@ -1,6 +1,9 @@
 connect gnuplot
 have option to plot which column
 	regex to get column #
+	
+added functionality to read all .fasta files in a given directory
+regex to delete only files that were created by scripts
 
 
 add heatmap R--mm_heatmap_plot.py
@@ -19,3 +22,4 @@ convert Ecol_test_histo.ps0.pdf Ecol_test_histo.ps1.pdf Ecol_test_histo.pdf
 
 
 ***move transpose program call from minmax file
+

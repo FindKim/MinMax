@@ -29,7 +29,9 @@ class MinMax {
 		MinMax(string, vector<Sequence>, CodonFrequency);
 			// Calculates MinMax values for each codon and calls outputFileMM
 		void outputFileMM(string, vector< pair< string, vector<float> > >);
-			// outputs gene in format of minmax values to filename.mm
+			// outputs gene in format of minmax values to filename.mm--in rows
+		void transposeOutput(string);
+			// Transposes outputfile from rows to columns format for gnuplot & R downstream
 			
 	private:
 		vector< pair< string, vector<float> > > minMaxSequences;

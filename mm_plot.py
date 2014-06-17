@@ -60,17 +60,6 @@ def main():
 			validFileExt = re.compile('.+\.mm')
 			if validFileExt.match(filePath) and os.path.isfile(filePath):
 
-				# Changes file extension from .mm to .csv
-				csvFilePath = string.replace(filePath, '.mm', '.csv')#.rstrip('.mm')
-#				csvFilePath = csvFilePath + '.csv'
-				touch(csvFilePath)
-
-				# Transposes rows of file to columns
-				transposeFile = './transpose -t --fsep "," %s > %s' %(filePath, csvFilePath)
-				renameFile = 'mv %s %s' %(csvFilePath, filePath) # Basically converts .mm to csv format
-				os.system(transposeFile)
-				os.system(renameFile)
-
 				selection = menu()
 				while(1):
 		
