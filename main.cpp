@@ -18,17 +18,38 @@
 #include <vector>
 //#include <regex>		// Regex to check for valid file ext WHY DOESN'T THE UNIV SUPPORT C++11?!
 #include "stdlib.h"	// System command
+#include <dirent.h>
 
 using namespace std;
+
+bool DirectoryExists(const char* pzPath) {
+	if(pzPath == NULL) return false;
+	
+	DIR *pDir;
+	bool bExists = false;
+	
+	pDir = opendir(pzPath);
+	
+	if(pDir != NULL) {
+		bExists = true;
+		(void) closedir (pDir);
+	}
+	return bExists;
+}
+
+
+
 
 int main() {
 
 	vector <string> genomeFileNames;
 	vector<ExtractSequence> genomeSeqs;
 	string filename;
+	bool filehasbeenread = false; // True only if a file has been read to make mm_plot function
 	// Enter genome files
-	cout << "- Enter file names to calculate codon frequency and min max values for a list of genomes." << endl;
-	cout << "- After all intended genomes are inputed, leave the entry blank and press enter to continue." << endl;
+	cout << "- Enter .fasta file(s) to calculate codon frequency and min max values." << endl;
+	cout << "- Or enter an absolute path to a directory to read all .fasta files." << endl;
+	cout << "- After all files are inputed, leave the entry blank and press enter to continue." << endl;
 	cout << "- 'q' to exit." << endl;
 	
 	// Loop to ask for file input
@@ -45,14 +66,46 @@ int main() {
 	  		ExtractSequence Seqs(filename);				// Extract sequences from file
 				genomeSeqs.push_back(Seqs);						// Adds sequences to vector of genomes
 				genomeFileNames.push_back(filename);	// Adds genome file names to vector
+				
+				filehasbeenread = true;
+			// Input directory to read all .fasta files
+			} else if(DirectoryExists(filename.c_str())) {			
+					
+					// Read all files in directory
+					DIR *dpdf;
+					struct dirent *epdf;
+					dpdf = opendir(filename.c_str());
+					if(dpdf != NULL) {
+						while (epdf = readdir(dpdf)) {
+						
+							// Check for valid file extension
+							string file = string(epdf->d_name);
+							if(file.find(".fasta") != string::npos) {
+							
+								// Extract sequences from files, add seqs and file names to vectors
+								ExtractSequence Seqs(file);
+								genomeSeqs.push_back(Seqs);
+								genomeFileNames.push_back(file);
+//								cout << epdf->d_name << endl;
+//								cout << file << endl;
+								filehasbeenread = true;
+							}
+						}
+					}
+				
+			  	if(filehasbeenread) {
+  					break;
+  				} else {
+  					cout << "No file has been read. Enter another file or path directory." << endl;
+		 		 	}
+		
+			// Exit program
+			} else if(filename.compare("q") == 0) {
+				exit(1);
 		
 			// Check if valid file extension
 			} else if(filename.find(".fasta") == string::npos) {
-				cout << "Invalid file format. Please enter another file name." << endl;
-
-			// Exit programm
-			} else if(filename.compare("q") == 0) {
-				exit(1);
+				cout << "Invalid file format or directory path. Please enter another file name." << endl;
 			
 			// Error message for non-existing files
 	  	} else if(!file.eof()) {

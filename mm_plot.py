@@ -25,7 +25,7 @@ def menu():
 	print('\nPlotting Menu:')
 	print('	1. Stacked histograms')
 	print('	2. Heatmaps')
-	print('	3. Input another file')
+	print('	3. Input another .mm file')
 	print('	4. List all .mm files in dir')
 	print('	5. Exit')
 

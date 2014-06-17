@@ -17,3 +17,5 @@ add p-value for histo and R
  gs -q -sPAPERSIZE=letter -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=Ecol.pdf Ecol_test_histo.ps0.pdf Ecol_test_histo.ps1.pdf
 convert Ecol_test_histo.ps0.pdf Ecol_test_histo.ps1.pdf Ecol_test_histo.pdf
 
+
+***move transpose program call from minmax file

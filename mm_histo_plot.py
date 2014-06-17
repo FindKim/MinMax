@@ -74,9 +74,9 @@ def plot_histo(plotFileName, psFileName):
 	
 # Deletes .gp and .ps files user will not need
 def del_temp_files(fileName):
-#	command = 'rm %s %s' %(psFileName, plotFileName)
 	fileroot = string.replace(fileName, '.mm', '')
-	command = 'rm %s*.ps %*.gp' %(fileroot, fileroot)
+	command = 'rm `ls | egrep \'%s[0-9]+_histo\'`' %(fileroot)
+#	print command
 	os.system(command)
 
 def merge_pdf_files(files, mergedFile):
@@ -93,6 +93,8 @@ def main():
 	fileName = str(sys.argv[1])
 	files = deque()
 	totNumFile = int(math.ceil(get_numOfSeqs(fileName)/10))+1
+	mergedFile = string.replace(fileName, '.mm', '_histo.pdf')
+	print 'Creating %s file...' %mergedFile
 #	print 'The number of sequences: %d' %(histo.get_numOfSeqs())
 
 	for numFile in range(0, totNumFile):
@@ -103,11 +105,9 @@ def main():
 		format_histo(fileName, plotFileName, psFileName, numFile+1, totNumFile)
 		input_histo(fileName, plotFileName, numFile)
 		plot_histo(plotFileName, psFileName)
-#		del_temp_files(plotFileName, psFileName)
 		files.append(pdfFileName)
-		print '%s has been created.' %(pdfFileName)
+#		print '%s has been created.' %(pdfFileName)
 
-	mergedFile = string.replace(fileName, '.mm', '_histo.pdf')
 	merge_pdf_files(files, mergedFile)
 	del_temp_files(fileName)
 	print '-------------All files have been created-------------'
