@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python -tt
 
 # mmplot created by Kim Ngo
 # June 6, 2014
@@ -9,6 +9,7 @@
 
 import mm_histo_plot
 
+import string
 import re
 import os
 import os.path
@@ -21,73 +22,98 @@ def touch(fname):
 		open(fname, 'a').close()
 
 def menu():
+	print('\nPlotting Menu:')
+	print('	1. Stacked histograms')
+	print('	2. Heatmaps')
+	print('	3. Input another file')
+	print('	4. List all .mm files in dir')
+	print('	5. Exit')
+
+	# Check if valid selection
+	selection = raw_input('Make a selection from the list above:	')
 	try:
-		print('\nPlotting Menu:')
-		print('	1. Stacked histograms')
-		print('	2. Heatmaps')
-		print('	3. Exit')
-		selection = int(input('Make a selection from the list above:	'))
+		selection = int(selection)
 		return selection
-	
-	except SyntaxError or NameError:
-		print('Invalid selection.')
-		return 0
-	
+	except ValueError or NameError:
+			print 'Invalid selection'
+			return 0
 	except KeyboardInterrupt:
 		sys.exit()
 
 def gnuplot(fname):
-	print 'attempting to link gnuplot'
-#	histo = histogram.histogram(fname)
-		
+#	print 'attempting to link gnuplot'
+	os.system('clear')
+	os.system('mm_histo_plot.py %s' %(fname))
 
 def r(fname):
+	os.system('clear')
 	print 'attempting to link R'
 
 
-while(1):
-	filePath = raw_input('Enter .mm file to plot if the file is in this working directory.\nOtherwise, enter the absolute path. \'q\' to exit.\n>')
 
-	# Check if file exists and has valid file extension
-	validFileExt = re.compile('.+\.mm')
-	if validFileExt.match(filePath) and os.path.isfile(filePath):
+def main():
+	while(1):
+		try:
+			filePath = raw_input('\nEnter a .mm file to plot if the file is in this working directory.\nOtherwise, enter the absolute path.\n--\'m\' for menu.\n--\'q\' to exit.\n>')
 
-		# Compiles transpose supporting c prog that transposes .mm file from rows to columns
-		os.system('gcc transpose.c -o transpose')
+		# Check if file exists and has valid file extension
+			validFileExt = re.compile('.+\.mm')
+			if validFileExt.match(filePath) and os.path.isfile(filePath):
 
-		# Changes file extension from .mm to .csv
-		csvFilePath = filePath.strip('.mm')
-		csvFilePath = csvFilePath + '.csv'
-		touch(csvFilePath)
+				# Changes file extension from .mm to .csv
+				csvFilePath = string.replace(filePath, '.mm', '.csv')#.rstrip('.mm')
+#				csvFilePath = csvFilePath + '.csv'
+				touch(csvFilePath)
 
-		# Transposes rows of file to columns
-		transposeFile = './transpose -t --fsep "," %s > %s' %(filePath, csvFilePath)
-		os.system(transposeFile)
+				# Transposes rows of file to columns
+				transposeFile = './transpose -t --fsep "," %s > %s' %(filePath, csvFilePath)
+				renameFile = 'mv %s %s' %(csvFilePath, filePath) # Basically converts .mm to csv format
+				os.system(transposeFile)
+				os.system(renameFile)
 
-		selection = menu()
-		while(1):
-		
-			# Stacked histograms
-			if selection == 1:
-				gnuplot(csvFilePath)
 				selection = menu()
+				while(1):
 		
-			# Heatmaps
-			elif selection == 2:
-				r(csvFilePath)
-				selection = menu()
+					# Stacked histograms
+					if selection == 1:
+						gnuplot(filePath)
+						selection = menu()
 		
-			# Exit
-			elif selection == 3:
-				sys.exit()
+					# Heatmaps
+					elif selection == 2:
+						r(filePath)
+						selection = menu()
+				
+					# Another file to plot
+					elif selection == 3:
+						break
+					
+					# List all .mm files in directory
+					elif selection == 4:
+						lsDir = raw_input('Enter the absolute path to directory of interest or \'.\' for this current working directory.\n>')
+						os.system('ls %s | awk \\/.mm/' %(lsDir))
+						selection = menu()
+					
+					# Exit
+					elif selection == 5:
+						sys.exit()
 	
-			# Invalid selection
-			else:
-				selection = menu()
+					# Invalid selection
+					else:
+						os.system('clear')
+						selection = menu()
 
-	elif filePath == 'q':
-		sys.exit()
-	else:
-		print '**Invalid file**\n'
-		continue
+			elif filePath == 'm':
+				selection = menu()
+			elif filePath == 'q':
+				sys.exit()
+			else:
+				print '**Invalid file**'
+				continue
+				
+		except KeyboardInterrupt:
+			sys.exit()
+
+if __name__ == '__main__':
+	main()
 

@@ -118,9 +118,11 @@ vector<float> MinMax::calcMinMax(Sequence &seq, vector<float> &minMap, vector<fl
 void MinMax::outputFileMM(string file, vector< pair< string, vector<float> > > minMaxSequences) {
 
 	string filename(file);
+	filename = filename.erase(filename.size()-6, filename.size()); //".fasta"
+//	cout << filename << endl;
 	filename.append(".mm");	
 
-	cout << "Creating " << filename << endl;
+	cout << "Creating " << filename << "..." << endl;
 
 	ofstream ofile;
 	ofile.open (filename.c_str());

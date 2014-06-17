@@ -40,14 +40,14 @@ int main() {
 	  	ifstream file(filename.c_str());
 
 			// Check if file exists and readable
-	  	if(file.good() && file.is_open() && filename.find(".fasta")) {
+	  	if(file.good() && file.is_open() && filename.find(".fasta") != string::npos) {
 	  		file.close();
 	  		ExtractSequence Seqs(filename);				// Extract sequences from file
 				genomeSeqs.push_back(Seqs);						// Adds sequences to vector of genomes
 				genomeFileNames.push_back(filename);	// Adds genome file names to vector
 		
 			// Check if valid file extension
-			} else if(!filename.find(".fasta\n")) {
+			} else if(filename.find(".fasta") == string::npos) {
 				cout << "Invalid file format. Please enter another file name." << endl;
 
 			// Exit programm

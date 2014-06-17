@@ -5,8 +5,8 @@
 #include<string.h>
 
 #define BLOCKSIZE 10240 //Read file in chunks of 10kb
-#define MAXCOLS 1000 //Allow for this many columns by default
-#define MAXROWS 1000 //Allow for this many rows by default
+#define MAXCOLS 10000 //Allow for this many columns by default
+#define MAXROWS 10000 //Allow for this many rows by default
 #define FIELDMAX 64 //Allow for this many characters in a field
 
 typedef struct {

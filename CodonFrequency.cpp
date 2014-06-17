@@ -620,9 +620,11 @@ int * CodonFrequency::getCodonToAAMap() {
 // Output file contains codon, codon frequency, and # of occurances
 void CodonFrequency::outputFileCF(string ofilename) {
 
+	ofilename = ofilename.erase(ofilename.size()-6, ofilename.size()); //".fasta"
+//	cout << ofilename << endl;
 	ofilename.append(".cf");
 
-	cout << "Creating " << ofilename << endl;
+	cout << "Creating " << ofilename << "..." << endl;
 
   ofstream ofile;
   ofile.open (ofilename.c_str());

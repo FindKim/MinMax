@@ -11,3 +11,9 @@ align plots to capture 80-90% of gene length for each species
 add p-value for histo and R
 	x axis: aligned gene length
 	y axis: # of sig rrc/100 cod
+
+
+
+ gs -q -sPAPERSIZE=letter -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=Ecol.pdf Ecol_test_histo.ps0.pdf Ecol_test_histo.ps1.pdf
+convert Ecol_test_histo.ps0.pdf Ecol_test_histo.ps1.pdf Ecol_test_histo.pdf
+
