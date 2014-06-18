@@ -1,15 +1,16 @@
-connect gnuplot
+--connect gnuplot
+--plots all sequences
 have option to plot which column
 	regex to get column #
 	
-added functionality to read all .fasta files in a given directory
-regex to delete only files that were created by scripts
-
+--added functionality to read all .fasta files in a given directory
+--regex to delete only files that were created by scripts
+add functionality to input codon useage .cf --> connected it to skip calc cf and to minmax
 
 add heatmap R--mm_heatmap_plot.py
 	learn R -shoot myself
 
-plot all sequences in genenome
+--plot all sequences in genenome
 align plots to capture 80-90% of gene length for each species
 add p-value for histo and R
 	x axis: aligned gene length
