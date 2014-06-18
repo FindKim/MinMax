@@ -48,7 +48,8 @@ int main() {
 	bool filehasbeenread = false; // True only if a file has been read to make mm_plot function
 	// Enter genome files
 	cout << "- Enter .fasta file(s) to calculate codon frequency and min max values." << endl;
-	cout << "- Or enter an absolute path to a directory to read all .fasta files." << endl;
+	cout << "- Enter an absolute path to a directory to read all .fasta files." << endl;
+	cout << "- Enter .cf file(s) to skip codon frequency calculations and continue to min max." << endl;
 	cout << "- After all files are inputed, leave the entry blank and press enter to continue." << endl;
 	cout << "- 'q' to exit." << endl;
 	
@@ -69,7 +70,11 @@ int main() {
 				
 				filehasbeenread = true;
 			// Input directory to read all .fasta files
-			} else if(DirectoryExists(filename.c_str())) {			
+			} else if(file.good() && file.is_open() && filename.find(".cf") != string::npos) {
+				file.close();
+				cout << filename << " is a codon freq file." << endl;
+			
+			} else if(DirectoryExists(filename.c_str())) {
 					
 					// Read all files in directory
 					DIR *dpdf;
