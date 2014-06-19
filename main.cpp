@@ -11,6 +11,7 @@
 #include "Sequence.h"
 #include "ExtractSequence.h"
 #include "MinMax.h"
+#include "CodonFrequency.h"
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -57,23 +58,35 @@ int main() {
 	while(1) {
 		cout << ">";
 		getline(cin, filename);
+		
 	  if(!filename.empty()) {
-
 	  	ifstream file(filename.c_str());
 
-			// Check if file exists and readable
-	  	if(file.good() && file.is_open() && filename.find(".fasta") != string::npos) {
+			// Check if codon freq file (.fasta.txt) or .cf exists and readable
+			if(file.good() && file.is_open()
+			&& (filename.compare(filename.size()-10, 10,".fasta.txt") == 0
+			|| filename.compare(filename.size()-3, 3, ".cf") == 0)) {
+			
+//				cout << "**CODON FREQ FILE." << endl;
+				file.close();
+				vector<Sequence> emptyVec;
+				CodonFrequency cf(filename, emptyVec);
+			
+			
+			// Check if .fasta file exists and readable
+	  	} else if(file.good() && file.is_open()
+	  	&& filename.compare(filename.size()-6, 6, ".fasta") == 0) {
+	  	
+//				cout << "**FASTA FILE" << endl;
 	  		file.close();
 	  		ExtractSequence Seqs(filename);				// Extract sequences from file
 				genomeSeqs.push_back(Seqs);						// Adds sequences to vector of genomes
 				genomeFileNames.push_back(filename);	// Adds genome file names to vector
 				
 				filehasbeenread = true;
+
+
 			// Input directory to read all .fasta files
-			} else if(file.good() && file.is_open() && filename.find(".cf") != string::npos) {
-				file.close();
-				cout << filename << " is a codon freq file." << endl;
-			
 			} else if(DirectoryExists(filename.c_str())) {
 					
 					// Read all files in directory

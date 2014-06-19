@@ -60,6 +60,11 @@ class CodonFrequency {
 		vector<float> getAvgMap();
 		float *getCodonFreq();
 		int *getCodonToAAMap();
+		
+		void readCFfile(string);
+			// Takes in the filename of a Codon Frequency file
+			// Parses line by line to extract codon counts
+			// Calculates CF by codontcount/totcodon *1000
 	
 	private:
 		vector< pair<string, int> > codon;
