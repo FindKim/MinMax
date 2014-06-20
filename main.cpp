@@ -48,9 +48,9 @@ int main() {
 	string filename;
 	bool filehasbeenread = false; // True only if a file has been read to make mm_plot function
 	// Enter genome files
-	cout << "- Enter .fasta file(s) to calculate codon frequency and min max values." << endl;
+	cout << "- Enter '.fasta' file(s) of genome(s) to calculate codon frequency." << endl;
 	cout << "- Enter an absolute path to a directory to read all .fasta files." << endl;
-	cout << "- Enter .cf file(s) to skip codon frequency calculations and continue to min max." << endl;
+	cout << "- Enter '.fasta.cf' file(s) of codon counts to continue with calculating %MinMax." << endl;
 	cout << "- After all files are inputed, leave the entry blank and press enter to continue." << endl;
 	cout << "- 'q' to exit." << endl;
 	
@@ -59,22 +59,25 @@ int main() {
 		cout << ">";
 		getline(cin, filename);
 		
-	  if(!filename.empty()) {
+	  if (!filename.empty()) {
 	  	ifstream file(filename.c_str());
 
 			// Check if codon freq file (.fasta.txt) or .cf exists and readable
-			if(file.good() && file.is_open()
-			&& (filename.compare(filename.size()-10, 10,".fasta.txt") == 0
-			|| filename.compare(filename.size()-3, 3, ".cf") == 0)) {
+			if (file.good() && file.is_open()
+			&& (filename.compare(filename.size()-9, 9, ".fasta.cf") == 0
+			|| filename.compare(filename.size()-10, 10, ".fasta.txt") == 0)) {
 			
 //				cout << "**CODON FREQ FILE." << endl;
 				file.close();
+				if (filename.compare(filename.size()-10, 10, ".fasta.txt") == 0)
+					filename = filename.erase(filename.size()-4, filename.size()); //".txt"
 				vector<Sequence> emptyVec;
 				CodonFrequency cf(filename, emptyVec);
+				MinMax mm(filename, emptyVec, cf);
 			
 			
 			// Check if .fasta file exists and readable
-	  	} else if(file.good() && file.is_open()
+	  	} else if (file.good() && file.is_open()
 	  	&& filename.compare(filename.size()-6, 6, ".fasta") == 0) {
 	  	
 //				cout << "**FASTA FILE" << endl;
@@ -93,12 +96,12 @@ int main() {
 					DIR *dpdf;
 					struct dirent *epdf;
 					dpdf = opendir(filename.c_str());
-					if(dpdf != NULL) {
+					if (dpdf != NULL) {
 						while (epdf = readdir(dpdf)) {
 						
 							// Check for valid file extension
 							string file = string(epdf->d_name);
-							if(file.find(".fasta") != string::npos) {
+							if (file.find(".fasta") != string::npos) {
 							
 								// Extract sequences from files, add seqs and file names to vectors
 								ExtractSequence Seqs(file);
@@ -111,34 +114,34 @@ int main() {
 						}
 					}
 				
-			  	if(filehasbeenread) {
+			  	if (filehasbeenread) {
   					break;
   				} else {
   					cout << "No file has been read. Enter another file or path directory." << endl;
 		 		 	}
 		
 			// Exit program
-			} else if(filename.compare("q") == 0) {
+			} else if (filename.compare("q") == 0) {
 				exit(1);
 		
 			// Check if valid file extension
-			} else if(filename.find(".fasta") == string::npos) {
+			} else if (filename.find(".fasta") == string::npos) {
 				cout << "Invalid file format or directory path. Please enter another file name." << endl;
 			
 			// Error message for non-existing files
-	  	} else if(!file.eof()) {
+	  	} else if (!file.eof()) {
 	  		cout << "Error openning '" << filename << "'. Please enter another file name.\n";				
 			}
 
 		// Exits loop--stops asking for file input
-		} else if(filename.empty()){
+		} else if (filename.empty()){
 			break;
   	}
 	}
 
 	// Calculates minmax (.mm) and codon freq (.cf) for each file input
 	vector<string>::iterator genomes_it = genomeFileNames.begin();
-	for(int genomeSeqs_it = 0; genomes_it != genomeFileNames.end(); genomes_it++, genomeSeqs_it++) {
+	for (int genomeSeqs_it = 0; genomes_it != genomeFileNames.end(); genomes_it++, genomeSeqs_it++) {
 //			cout << "'" << *genomes_it << "'" << endl;
 	  CodonFrequency CF(*genomes_it, genomeSeqs[genomeSeqs_it].getVectorOfSequences());
   	MinMax calcMinMax(*genomes_it, genomeSeqs[genomeSeqs_it].getVectorOfSequences(), CF);

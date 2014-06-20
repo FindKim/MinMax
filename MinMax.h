@@ -32,6 +32,8 @@ class MinMax {
 			// outputs gene in format of minmax values to filename.mm--in rows
 		void transposeOutput(string);
 			// Transposes outputfile from rows to columns format for gnuplot & R downstream
+		vector<Sequence> readInputFile(string);
+			// Parses file line by line to extract sequences to then calc %MM
 			
 	private:
 		vector< pair< string, vector<float> > > minMaxSequences;

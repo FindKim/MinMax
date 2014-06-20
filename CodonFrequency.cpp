@@ -24,6 +24,30 @@
 #include <algorithm>
 #include <deque>
 
+/*
+ 'GCT' => 'A', 'GCC' => 'A', 'GCA' => 'A', 'GCG' => 'A', 
+ 'TGT' => 'C', 'TGC' => 'C',
+ 'GAT' => 'D', 'GAC' => 'D',
+ 'GAA' => 'E', 'GAG' => 'E',
+  'TTT' => 'F', 'TTC' => 'F',
+  'GGT' => 'G', 'GGC' => 'G', 'GGA' => 'G', 'GGG' => 'G', 
+  'CAT' => 'H', 'CAC' => 'H', 
+  'ATT' => 'I', 'ATC' => 'I', 'ATA' => 'I',
+  'AAA' => 'K', 'AAG' => 'K',
+  'TTG' => 'L', 'TTA' => 'L', 'CTT' => 'L', 'CTC' => 'L', 'CTA' => 'L', 'CTG' => 'L', 
+  'ATG' => 'M',
+  'AAT' => 'N', 'AAC' => 'N',
+  'CCT' => 'P', 'CCC' => 'P', 'CCA' => 'P', 'CCG' => 'P',
+  'CAA' => 'Q', 'CAG' => 'Q',
+  'CGT' => 'R', 'CGC' => 'R', 'CGA' => 'R', 'CGG' => 'R', 'AGA' => 'R', 'AGG' => 'R', 
+  'TCT' => 'S', 'TCC' => 'S', 'TCA' => 'S', 'TCG' => 'S', 'AGT' => 'S', 'AGC' => 'S',
+  'ACT' => 'T', 'ACC' => 'T', 'ACA' => 'T', 'ACG' => 'T',
+  'GTT' => 'V', 'GTC' => 'V', 'GTA' => 'V', 'GTG' => 'V',
+  'TGG' => 'W',
+  'TAT' => 'Y', 'TAC' => 'Y',
+  'TAA' => '*', 'TAG' => '*', 'TGA' => '*');
+*/
+
 using namespace std;
 
 const int NUM_TYPE_OF_CODONS = 64;
@@ -35,53 +59,29 @@ CodonFrequency::CodonFrequency(string filename, vector<Sequence> seq) {
 		codonOcc[i] = 0;
 	}
 
+	// string of all codons
+	string codonStr = "AAAAAGAACAATAGAAGGAGCAGTACAACGACCACTATAATGATCATTGAAGAGGACGATGGAGGGGGCGGTGCAGCGGCCGCTGTAGTGGTCGTTCAACAGCACCATCGACGGCGCCGTCCACCGCCCCCTCTACTGCTCCTTTAATAGTACTATTGATGGTGCTGTTCATCGTCCTCTTTATTGTTCTTT";
+	codonToAAMap = createCodonToAAMap(codonStr, codonMap);
+
 	if (!seq.empty()) {
 		cout << "Calculating codon frequency..." << endl;
-	/*
-					 'GCT' => 'A', 'GCC' => 'A', 'GCA' => 'A', 'GCG' => 'A', 
-					 'TGT' => 'C', 'TGC' => 'C',
-					 'GAT' => 'D', 'GAC' => 'D',
-					 'GAA' => 'E', 'GAG' => 'E',
-			     'TTT' => 'F', 'TTC' => 'F',
-			     'GGT' => 'G', 'GGC' => 'G', 'GGA' => 'G', 'GGG' => 'G', 
-			     'CAT' => 'H', 'CAC' => 'H', 
-			     'ATT' => 'I', 'ATC' => 'I', 'ATA' => 'I',
-			     'AAA' => 'K', 'AAG' => 'K',
-			     'TTG' => 'L', 'TTA' => 'L', 'CTT' => 'L', 'CTC' => 'L', 'CTA' => 'L', 'CTG' => 'L', 
-			     'ATG' => 'M',
-			     'AAT' => 'N', 'AAC' => 'N',
-			     'CCT' => 'P', 'CCC' => 'P', 'CCA' => 'P', 'CCG' => 'P',
-			     'CAA' => 'Q', 'CAG' => 'Q',
-			     'CGT' => 'R', 'CGC' => 'R', 'CGA' => 'R', 'CGG' => 'R', 'AGA' => 'R', 'AGG' => 'R', 
-			     'TCT' => 'S', 'TCC' => 'S', 'TCA' => 'S', 'TCG' => 'S', 'AGT' => 'S', 'AGC' => 'S',
-			     'ACT' => 'T', 'ACC' => 'T', 'ACA' => 'T', 'ACG' => 'T',
-			     'GTT' => 'V', 'GTC' => 'V', 'GTA' => 'V', 'GTG' => 'V',
-			     'TGG' => 'W',
-			     'TAT' => 'Y', 'TAC' => 'Y',
-			     'TAA' => '*', 'TAG' => '*', 'TGA' => '*');
-	*/
-		// string of all codons
-		string codonStr = "AAAAAGAACAATAGAAGGAGCAGTACAACGACCACTATAATGATCATTGAAGAGGACGATGGAGGGGGCGGTGCAGCGGCCGCTGTAGTGGTCGTTCAACAGCACCATCGACGGCGCCGTCCACCGCCCCCTCTACTGCTCCTTTAATAGTACTATTGATGGTGCTGTTCATCGTCCTCTTTATTGTTCTTT";
-		codonToAAMap = createCodonToAAMap(codonStr, codonMap);
-
 		vector<Sequence> Sequences = removeSeq(seq);
 		calcFreq(Sequences);
-
-		AAtoCodonMap = createMap(codonFreq);
-	//	printMap(AAtoCodonMap);
-		minMap = createMinMap(AAtoCodonMap);
-		maxMap = createMaxMap(AAtoCodonMap);
-		avgMap = createAvgMap(AAtoCodonMap);
-		cout << "Finished calculations." << endl; 
-	
 		outputFileCF(filename);
 
-
-	} else if(seq.empty()) {
+	} else if (seq.empty()) {
 		cout << "Reading " << filename << endl;
 		readCFfile(filename);
 		cout << "Finished reading " << filename << endl;
+		cout << "Calculating codon frequency..." << endl;
 	}
+
+	AAtoCodonMap = createMap(codonFreq);
+//	printMap(AAtoCodonMap);
+	minMap = createMinMap(AAtoCodonMap);
+	maxMap = createMaxMap(AAtoCodonMap);
+	avgMap = createAvgMap(AAtoCodonMap);
+	cout << "Finished calculations." << endl; 
 }
 
 
@@ -648,7 +648,7 @@ void CodonFrequency::readCFfile(string filename) {
 		totCount += count;
 	}
 	
-	for(int i = 0; i < 64; i++) {
+	for (int i = 0; i < 64; i++) {
 		codonFreq[i] = codonCount[i]/totCount * 1000;
 //		cout << i << " "<< codonCount[i] << " / " << totCount << " = " << codonFreq[i] << endl;
 	}
@@ -662,7 +662,7 @@ void CodonFrequency::outputFileCF(string ofilename) {
 
 //	ofilename = ofilename.erase(ofilename.size()-6, ofilename.size()); //".fasta"
 //	cout << ofilename << endl;
-	ofilename.append(".txt"); //*.fasta.txt
+	ofilename.append(".cf"); //*.fasta.txt
 
 	cout << "Creating " << ofilename << "..." << endl;
 

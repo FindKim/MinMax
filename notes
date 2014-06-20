@@ -1,13 +1,15 @@
 --connect gnuplot
 --plots all sequences
-have option to plot which column
-	regex to get column #
-	
+	--plots 10 histograms per pdf
+	--merge each pdf created into master file
 --added functionality to read all .fasta files in a given directory
+--move transpose program call from minmax file
 --regex to delete only files that were created by scripts
 --add functionality to input codon useage .fasta.txt --> connected it to skip calc cf and to minmax
 add functionality to input file to be plotted if .fasta.txt is inputted
 specify region wanted to plot for gnuplot
+have option to plot which column
+	regex to get column #
 
 add heatmap R--mm_heatmap_plot.py
 	learn R -shoot myself
@@ -22,7 +24,4 @@ add p-value for histo and R
 
  gs -q -sPAPERSIZE=letter -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=Ecol.pdf Ecol_test_histo.ps0.pdf Ecol_test_histo.ps1.pdf
 convert Ecol_test_histo.ps0.pdf Ecol_test_histo.ps1.pdf Ecol_test_histo.pdf
-
-
-***move transpose program call from minmax file
 

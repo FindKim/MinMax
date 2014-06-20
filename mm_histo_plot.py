@@ -93,7 +93,7 @@ def main():
 	fileName = str(sys.argv[1])
 	files = deque()
 	totNumFile = int(math.ceil(get_numOfSeqs(fileName)/10))+1
-	mergedFile = string.replace(fileName, '.mm', '_histo.pdf')
+	mergedFile = string.replace(fileName, '.fasta.mm', '_histo.pdf')
 	print 'Creating %s file...' %mergedFile
 #	print 'The number of sequences: %d' %(histo.get_numOfSeqs())
 

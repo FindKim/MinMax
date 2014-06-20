@@ -13,11 +13,14 @@
 #include "MinMax.h"
 #include "Sequence.h"
 #include "CodonFrequency.h"
+#include "ExtractSequence.h"
 #include <vector>
+#include <iostream>	// getline
 #include <fstream> // output file
 #include <utility>
 #include <string>
 #include <stdlib.h> // system
+#include <stdexcept> // out of range exception
 
 const int WINDOWSIZE = 17;
 
@@ -34,6 +37,22 @@ MinMax::MinMax(string filename, vector<Sequence> seq, CodonFrequency cf) {
 	int *codonToAAMap = cf.getCodonToAAMap();
 	
 	
+	// If no .fasta file was inputted, read file w/sequences and replace with mm values
+	if (seq.empty()) {
+		cout << "\n- Enter '.fasta' file of sequences to calculate %MinMax." << endl;
+		while(1) {
+			cout << ">";
+			getline(cin, filename);
+			try { if (filename.compare(filename.size()-6, 6, ".fasta") == 0)
+				break;
+			} catch (const out_of_range) {}
+		 cout << "**Invalid file" << endl;
+			
+		}
+		ExtractSequence sequences(filename);
+		seq = sequences.getVectorOfSequences();
+	}
+
 	// Calculates min max for each sequence in vector of seqs
 	// Creates a vector of pairs for each sequence: name & vector of minmax values
 	// Prints to output file
@@ -51,8 +70,9 @@ MinMax::MinMax(string filename, vector<Sequence> seq, CodonFrequency cf) {
 	}
 	outputFileMM(filename, minMaxSequences);
 
-	string mmfile = filename.erase(filename.size()-6, filename.size()); //".fasta"
-	mmfile.append(".mm");	
+//	string mmfile = filename.erase(filename.size()-6, filename.size()); //".fasta"
+	string mmfile = filename;
+	mmfile.append(".mm");
 	transposeOutput(mmfile);
 }
 
@@ -80,6 +100,7 @@ vector<float> MinMax::calcMinMax(Sequence &seq, vector<float> &minMap, vector<fl
 			string triplet = seqStr.substr(i+j,3);
 			numCodonRep = CodonFrequency::codonStrToBinaryRep(triplet);
 			AA = codonToAAMap[numCodonRep];
+//			cout << triplet << " ";
 //			cout << seqStr << endl;
 //			cout << "numcodonRep = " << numCodonRep << endl;
 //			cout << "AA " << AA << " " << codonToAAMap[numCodonRep] << endl;
@@ -123,7 +144,7 @@ vector<float> MinMax::calcMinMax(Sequence &seq, vector<float> &minMap, vector<fl
 void MinMax::outputFileMM(string file, vector< pair< string, vector<float> > > minMaxSequences) {
 
 	string filename(file);
-	filename = filename.erase(filename.size()-6, filename.size()); //".fasta"
+//	filename = filename.erase(filename.size()-6, filename.size()); //".fasta"
 //	cout << filename << endl;
 	filename.append(".mm");	
 
