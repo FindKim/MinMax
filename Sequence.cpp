@@ -93,11 +93,3 @@ void Sequence :: addGaptoEnd(int g){
     }
 }
 
-//Add a Domain to the member vector Domains
-void Sequence :: addDomain(Domain addDomain)
-{
-	Domains.push_back(addDomain);
-}
-
-
-

@@ -33,11 +33,9 @@ class ExtractSequence{
     void remove1Seq(int); // remove 1 sequence from the vector
     void addGapstoAllEnds(int); // add gaps to the ends of all sequences
     void addGapstoAll(int); // add one gap to all sequences at a position
-private:
+	private:
     vector<Sequence> Sequences; // vector of Sequence object
     vector<string> headers; // store name and description.
-
-    void addDomains(string, vector<Sequence>); //Takes a text file and adds Domains to their respective Sequences	
 
 };
 #endif /* defined(____ExtractSequence__) */
