@@ -50,6 +50,8 @@ def format_histo(fileName, plotFileName, psFileName, fileNum, totNumFile):
 	fout.write('\nset yrange[-100:100]\n#set format y "rare	common"\n#set ytics (" Common" 50,  "Rare" -50)\n#set ytics axis in scale 0,0 nomirror rotate by 90 font "Helvetica,10"\n#set ytics font "Helvetica,5"\n')
 	fout.write('set key autotitle columnhead\nset key inside left bottom vertical nobox\nset key samplen -1\n')
 	fout.write('set multiplot layout 10, 1 title "%%MinMax plots for %s"\nset style histogram rowstacked\nset style data histogram\n' %(string.replace(fileName,'.mm', ' (%d/%d)' %(fileNum, totNumFile))))
+	fout.write('\n# Ignores entries containing NaN ("Not a Number")\nset datafile missing "?"\n')
+#	fout.write('# Explicitly setting boxwidth to plot missing data\nset boxwidth -2 absolute\n')
 	fout.write('\n# Histogram bars filled with solid color and black border\nset style fill solid noborder\n')
 	fout.close()
 
@@ -57,7 +59,7 @@ def format_histo(fileName, plotFileName, psFileName, fileNum, totNumFile):
 def input_histo(fileName, plotFileName, mult):
 	fout = open(plotFileName, 'a')
 	for i in range(1+10*mult, 11+10*mult): # gnuplot begins counting rows at 1 (9 plots)
-		fout.write('plot \'' + fileName + '\' using ($' + str(i) + ' > 0 ? $' + str(i) + ' : 0) linecolor rgb \"#0000FF\", \'\' using ($' + str(i) + ' < 0 ? $' + str(i) + ' : -0.05) title \'\' linecolor rgb \"#FF00FF\"\n')
+		fout.write('plot \'' + fileName + '\' using ($' + str(i) + ' > 0 ? $' + str(i) + ' : 0)  linecolor rgb \"#0000FF\", \'\' using ($' + str(i) + ' < 0 ? $' + str(i) + ' : -0.01) title \'\' with boxes linecolor rgb \"#FF00FF\"\n')
 #		seqList = get_seqsNameList()
 #		for seq in seqList:
 #		seqList = self.get_seqsNameList()
@@ -76,8 +78,10 @@ def plot_histo(plotFileName, psFileName):
 def del_temp_files(fileName):
 	fileroot = string.replace(fileName, '.mm', '')
 	command = 'rm `ls | egrep \'%s[0-9]+_histo\'`' %(fileroot)
+	command1 = 'rm `ls | egrep \'_histo_temp.mm\'`'
 #	print command
 	os.system(command)
+	os.system(command1)
 
 def merge_pdf_files(files, mergedFile):
 	command = 'convert '
@@ -88,6 +92,18 @@ def merge_pdf_files(files, mergedFile):
 	os.system(command)
 	print '%s has been created.' %mergedFile
 
+# Allows no value positions to be plotted as blank values
+def no_value_to_blank_value(filename, tempfile):
+	command = 'sed -i \'s/^,/0,/g\' %s' %tempfile 	# Adds blank space to beginning of line
+	command1 = 'sed -i \'s/,,/,0,/g\' %s' %tempfile	# Adds blank in between ,,
+	command2 = 'sed -i \'s/,$/,0/g\' %s' %tempfile 	# Adds blank to end of line
+	os.system(command)
+	os.system(command1)	# 2x to get ,,, -> , ,, -> , , ,
+	os.system(command1)
+	os.system(command2)
+	
+	
+
 def main():
 #	print str(sys.argv[1])
 	fileName = str(sys.argv[1])
@@ -96,14 +112,17 @@ def main():
 	mergedFile = string.replace(fileName, '.fasta.mm', '_histo.pdf')
 	print 'Creating %s file...' %mergedFile
 #	print 'The number of sequences: %d' %(histo.get_numOfSeqs())
-
+	tempFile = string.replace(fileName, '.fasta.mm', '_histo_temp.mm')
+	command = 'cp %s %s' %(fileName, tempFile)
+	os.system(command)
+	no_value_to_blank_value(fileName, tempFile) # Edits temp
 	for numFile in range(0, totNumFile):
 		plotFileName = get_plotFileName(fileName, numFile)
 		psFileName = get_psFileName(fileName, numFile)
 		pdfFileName = get_pdfFileName(fileName, numFile)
 		touch(plotFileName)
-		format_histo(fileName, plotFileName, psFileName, numFile+1, totNumFile)
-		input_histo(fileName, plotFileName, numFile)
+		format_histo(tempFile, plotFileName, psFileName, numFile+1, totNumFile)
+		input_histo(tempFile, plotFileName, numFile)
 		plot_histo(plotFileName, psFileName)
 		files.append(pdfFileName)
 #		print '%s has been created.' %(pdfFileName)

@@ -26,4 +26,4 @@ transpose: transpose.c
 	# Compiles transpose supporting c prog that transposes .mm file from rows to columns
 
 clean:
-	rm -f *.o *.mm *.cf *.pyc *~ minmax transpose
+	rm -f *.o *.pyc *~ minmax transpose

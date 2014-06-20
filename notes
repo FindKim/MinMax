@@ -6,7 +6,8 @@
 --move transpose program call from minmax file
 --regex to delete only files that were created by scripts
 --add functionality to input codon useage .fasta.txt --> connected it to skip calc cf and to minmax
-add functionality to input file to be plotted if .fasta.txt is inputted
+--add functionality to input file to be plotted if .fasta.txt is inputted
+--align plots by length
 specify region wanted to plot for gnuplot
 have option to plot which column
 	regex to get column #
@@ -19,9 +20,3 @@ align plots to capture 80-90% of gene length for each species
 add p-value for histo and R
 	x axis: aligned gene length
 	y axis: # of sig rrc/100 cod
-
-
-
- gs -q -sPAPERSIZE=letter -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=Ecol.pdf Ecol_test_histo.ps0.pdf Ecol_test_histo.ps1.pdf
-convert Ecol_test_histo.ps0.pdf Ecol_test_histo.ps1.pdf Ecol_test_histo.pdf
-
